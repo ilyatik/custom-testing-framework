@@ -7,21 +7,21 @@ import lombok.Setter;
 @Setter
 class AssertionResult extends AssertionError {
 
-    private Object asserted;
+    private Object actual;
     private Object expected;
     private Boolean result;
     private String testName;
 
     protected AssertionResult() {
-        this.asserted = null;
+        this.actual = null;
         this.expected = null;
         this.result = false;
         this.testName = "";
     }
 
-    protected AssertionResult(Object asserted, Object expected,
+    protected AssertionResult(Object actual, Object expected,
                               Boolean result) {
-        this.asserted = asserted;
+        this.actual = actual;
         this.expected = expected;
         this.result = result;
         this.testName = "";
@@ -32,7 +32,7 @@ class AssertionResult extends AssertionError {
         return "\nTest name: " + testName +
                 "\n\tResult:  " + result.toString() +
                 "\n\tExpected: " + expected.toString() +
-                "\n\tActual: " + asserted.toString();
+                "\n\tActual: " + actual.toString();
     }
 
 }

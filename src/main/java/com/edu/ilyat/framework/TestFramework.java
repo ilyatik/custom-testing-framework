@@ -1,6 +1,5 @@
 package com.edu.ilyat.framework;
 
-
 import com.edu.ilyat.annotation.After;
 import com.edu.ilyat.annotation.Before;
 import com.edu.ilyat.annotation.Test;
@@ -29,16 +28,14 @@ public class TestFramework {
             List<AssertionResult> results = runTestsFromClass(iteratedClass);
             if (results == null || results.size() == 0) {
                 logger.error("Class {} does not contain test methods.", iteratedClass.getName());
-            } else {
-                int passed = (int) results.stream()
-                        .filter(AssertionResult::getResult)
-                        .count();
-                logger.info("\nTest class name: {}\n\tTotal: {}\n\tPassed: {}\n\tFailed: {}", iteratedClass.getName(),
-                        results.size(), passed, results.size() - passed);
-                results.forEach(result -> {
-                    logger.info(result.toString());
-                });
+                return;
             }
+            int passed = (int) results.stream()
+                    .filter(AssertionResult::getResult)
+                    .count();
+            logger.info("\nTest class name: {}\n\tTotal: {}\n\tPassed: {}\n\tFailed: {}", iteratedClass.getName(),
+                    results.size(), passed, results.size() - passed);
+            results.forEach(result -> logger.info(result.toString()));
         });
     }
 
@@ -49,7 +46,7 @@ public class TestFramework {
         try {
             return getResults(testList, beforeList, afterList, testClass.getConstructor().newInstance());
         } catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-            logger.error("Can't create instance of testing class!\n Error:{}.", e.toString());
+            logger.error("Can't create instance of testing class! Error: ", e);
         }
         return null;
     }
@@ -79,7 +76,7 @@ public class TestFramework {
                 testResult = (AssertionResult) e.getTargetException();
             }
         } catch (IllegalAccessException e) {
-            logger.error("Failed to call method!\n Error: {}.", e.toString());
+            logger.error("Failed to call method! Error: ", e);
         }
         afterList.forEach(method ->
                 invoke(method, testClass));
@@ -91,7 +88,7 @@ public class TestFramework {
         try {
             method.invoke(testClass);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            logger.error("Failed to call method!\n Error: {}.", e.toString());
+            logger.error("Failed to call method! Error: ", e);
         }
     }
 }
